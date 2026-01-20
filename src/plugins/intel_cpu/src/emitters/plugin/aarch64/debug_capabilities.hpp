@@ -16,18 +16,24 @@ namespace ov::intel_cpu::aarch64 {
 
 // Usage
 // 1. Include this header in AArch64 JIT kernels if register printing is required.
-// 2. Invoke the RegPrinter::print method with a supported register/precision combination.
+// 2. Invoke the RegPrints::print method with a supported register/precision combination.
 //    Examples:
-//      RegPrinter::print<float>(*this, vmm_val, "vmm_val");
-//      RegPrinter::print<int>(*this, vmm_idx);
-//      RegPrinter::print<int>(*this, reg_work_amount, "reg_work_amount");
+//      RegPrints::print<float>(*this, vmm_val, "vmm_val");
+//      RegPrints::print<int>(*this, vmm_idx);
+//      RegPrints::print<int>(*this, reg_work_amount, "reg_work_amount");
 //
 // Supported combinations:
 //           fp32        int32       int8        u8
 // VReg       Yes         Yes        No          No
 // XReg       Yes         Yes        No          No
 // WReg       Yes         Yes        No          No
-class RegPrinter {
+/**
+ * @brief Class RegPrints
+ * Provides the ability to print the contents of general-purpose and vector registers
+ * during JIT kernel execution on ARM64 SIMD platforms.
+ * It is used for debugging JIT kernels by printing register values at runtime.
+ */
+class RegPrints {
 public:
     using jit_generator_t = dnnl::impl::cpu::aarch64::jit_generator;
 
@@ -47,7 +53,7 @@ public:
     static constexpr size_t sp_alignment = 16;
 
 private:
-    RegPrinter() = default;
+    RegPrints() = default;
 
     template <typename PRC_T, typename REG_T, typename PrinterFunc>
     static void print_reg_common(jit_generator_t& h, const REG_T& reg, const char* name, PrinterFunc printer);
